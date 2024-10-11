@@ -40,7 +40,7 @@ struct MovieListView: View {
                     .toolbar {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Text(currentMovie)
-                                .font(.system(size: 48, weight: .bold))
+                                .font(.system(size: 42, weight: .bold))
                                 .foregroundColor(.white)
                         }
                     }
@@ -62,6 +62,26 @@ struct MovieRowView: View {
     let movie: Movie
     let isFavorite: Bool
     
+    private let formatDate: DateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd"
+        return format
+    } ()
+    
+    private let outputFormatter: DateFormatter = {
+        let format = DateFormatter()
+        format.dateFormat = "MMMM d, yyyy"
+        return format
+    }()
+    
+    var formattedReleaserDate: String {
+        if let date = formatDate.date(from: movie.releaseDate) {
+    
+            return outputFormatter.string(from: date)
+    }
+    return movie.releaseDate
+}
+    
     var body: some View {
         HStack(spacing: 15) {
             Image(movie.posterPath)
@@ -70,7 +90,7 @@ struct MovieRowView: View {
                 .frame(height: 250)
                 .cornerRadius(8)
             
-            VStack(alignment: .leading, spacing: 5) {
+            VStack(alignment: .leading, spacing: 9) {
                 Text(movie.title)
                     .font(.headline)
                     .lineLimit(1)
@@ -80,9 +100,9 @@ struct MovieRowView: View {
                     CircularProgressView(progress: movie.voteAverage / 10 )
                         .frame(height: 40)
                     
-                    Text(movie.releaseDate)
+                    Text(formattedReleaserDate)
                         .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.white)
                 }
                 
                 Text(movie.overview)
@@ -91,14 +111,14 @@ struct MovieRowView: View {
                     .foregroundColor(.gray)
             }
             
-            Spacer()
-            
             Image(systemName: isFavorite ? "heart.fill" : "heart")
                 .foregroundColor(isFavorite ? .red : .gray)
         }
         .padding(.vertical, 8)
     }
 }
+
+
 
 struct CircularProgressView: View {
     let progress: Double

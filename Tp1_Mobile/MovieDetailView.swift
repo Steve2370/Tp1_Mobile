@@ -3,50 +3,77 @@ import SwiftUI
 struct MovieDetailView: View {
     let movie: Movie
     
+    var genreNames: [String] {
+        movie.genreIDS.compactMap { genresData[$0] }
+    }
+    
     var body: some View {
-        ScrollView {
-            ZStack(alignment: .bottom) {
-                Image(movie.posterPath)
+        GeometryReader { geometry in
+            ZStack {
+              
+                Image(movie.backdropPath)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(height: UIScreen.main.bounds.height * 0.7)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
                     .clipped()
-                    .overlay(
-                        LinearGradient(
-                            gradient: Gradient(colors: [.clear, .black.opacity(0.8)]),
-                            startPoint: .top, endPoint: .bottom))
+                    .overlay(Color.black.opacity(0.6))
                 
-                
-                VStack(alignment: .leading, spacing: 10) {
-                    Text(movie.title)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                    
-                    HStack {
-                        Text(movie.overview)
-                        Spacer()
-
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        HStack(alignment: .top, spacing: 20) {
+            
+                            Image(movie.posterPath)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: geometry.size.width * 0.3)
+                                .cornerRadius(10)
+                                .shadow(radius: 10)
+                            
+                            Text(movie.title)
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(.top, 50)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(genreNames, id: \.self) { genre in
+                                    Text(genre)
+                                        .foregroundColor(.black)
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 5)
+                                        .background(Color.yellow)
+                                        .cornerRadius(5)
+                                }
+                            }
+                        }
+                        Text("Sommaire")
+                            .font(.largeTitle)
+                            .bold()
+                            .foregroundColor(.white)
+                        
+                        HStack(alignment: .top, spacing: 20) {
+                            VStack {
+                                CircularProgressView(progress: movie.voteAverage / 10)
+                                    .frame(width: 90, height: 90)
+                            }
+                            Text(movie.overview)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                     }
-                    .font(.subheadline)
-                    .foregroundColor(.white)
-                    .padding(.top)
+                    .padding()
                 }
-                .padding()
-                .background(Color.black.opacity(0.5))
             }
         }
-        .edgesIgnoringSafeArea(.top)
+        .edgesIgnoringSafeArea(.all)
     }
 }
-//            .scrollTargetLayout()
-//            .scrollTargetBehavior(.viewAligned)
-//            Spacer()
-//            
-//        }
-//    }
-//}
 
-#Preview("Beetlejuice Beetlejuice") {
-    MovieDetailView(movie: allMoviesData[0])
+struct MovieDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        MovieDetailView(movie: allMoviesData[0])
+    }
 }

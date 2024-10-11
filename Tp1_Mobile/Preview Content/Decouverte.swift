@@ -11,6 +11,7 @@ struct DiscoveryView: View {
     
     var body: some View {
         ZStack {
+            GeometryReader { geometry in}
             // Fond d'écran du film
             Image(randomMovie.backdropPath)
                 .resizable()
@@ -18,8 +19,10 @@ struct DiscoveryView: View {
                 .edgesIgnoringSafeArea(.all)
                 .overlay(Color.black.opacity(0.3)) // Assombrir légèrement l'image pour une meilleure lisibilité
             
-            VStack {
-                
+            VStack() {
+                HeaderView()
+                    .padding(.top)
+                Spacer()
                 // Titre du film
                 Text(randomMovie.title)
                     .font(.largeTitle)
@@ -28,6 +31,7 @@ struct DiscoveryView: View {
                     .multilineTextAlignment(.center)
                     .padding()
                       
+                Spacer()
                 // Bouton pour choisir un nouveau film aléatoire
                 Button(action: {
                     withAnimation {
