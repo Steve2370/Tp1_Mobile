@@ -84,7 +84,7 @@ struct RandomMoviesCarousel: View {
             }
             .frame(height: UIScreen.main.bounds.height * 0.3)
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-            .animation(.spring(response: 0.5, dampingFraction: 0.6, blendDuration: 0), value: currentIndex)
+            .animation(.spring(response: 0.6, dampingFraction: 0.6, blendDuration: 0), value: currentIndex)
             .onAppear {
                 startAutoScroll()
             }
