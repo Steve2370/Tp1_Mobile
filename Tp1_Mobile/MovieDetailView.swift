@@ -45,7 +45,7 @@ struct MovieDetailView: View {
                                         .padding(.horizontal, 10)
                                         .padding(.vertical, 5)
                                         .background(Color.yellow)
-                                        .cornerRadius(5)
+                                        .cornerRadius(6)
                                 }
                             }
                         }
